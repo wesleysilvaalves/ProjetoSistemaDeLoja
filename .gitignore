@@ -1,0 +1,21 @@
+# Node
+node_modules/
+dist/
+
+# Ambiente
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Banco se tiver dump
+*.sqlite
+*.db
+
+# Sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
