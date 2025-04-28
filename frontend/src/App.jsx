@@ -8,6 +8,7 @@ import PainelPage from './pages/PainelPage';
 import DashboardLayout from './layouts/DashboardLayout';
 import PedidoPage from './pages/PedidoPage'; // Tela de fazer pedido (cliente)
 import PedidosControlePage from './pages/PedidosControlePage'; // Tela de controle de pedidos (admin)
+import RelatoriosFinanceirosPage from './pages/RelatoriosFinanceirosPage'; // Relatórios financeiros
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('token'));
@@ -37,14 +38,13 @@ export default function App() {
         } />
 
         {isAuthenticated && (
-          <>
+          <Route element={<DashboardLayout />}>
             <Route path="/painel" element={<PainelPage />} />
-            <Route path="/pedidos" element={<PedidosControlePage />} /> {/* Controle de pedidos */}
-            <Route path="/estoque" element={<DashboardLayout />}>
-              <Route path="cadastrar" element={<EstoqueCadastroPage />} />
-              <Route path="listar" element={<EstoqueListagemPage />} />
-            </Route>
-          </>
+            <Route path="/pedidos" element={<PedidosControlePage />} />
+            <Route path="/estoque/cadastrar" element={<EstoqueCadastroPage />} />
+            <Route path="/estoque/listar" element={<EstoqueListagemPage />} />
+            <Route path="/relatorios" element={<RelatoriosFinanceirosPage />} />
+          </Route>
         )}
 
         {/* A tela de fazer pedido fica pública (cliente pode acessar sem login) */}

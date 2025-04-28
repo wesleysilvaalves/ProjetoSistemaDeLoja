@@ -13,10 +13,16 @@ app.use(express.json());
 // Rotas
 app.use('/api', userRoutes);
 
-// Teste de conexão com banco
+// Teste de conexão com banco e sincronização dos modelos
 sequelize.authenticate()
   .then(() => {
     console.log('✅ Conectado ao banco de dados!');
+    
+    // Sincronizar modelos com o banco de dados
+    return sequelize.sync({ alter: true });
+  })
+  .then(() => {
+    console.log('📦 Tabelas sincronizadas com sucesso!');
   })
   .catch((err) => {
     console.error('❌ Erro ao conectar com o banco:', err);
