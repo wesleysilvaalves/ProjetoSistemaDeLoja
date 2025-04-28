@@ -15,9 +15,10 @@ const Usuario = sequelize.define('Usuario', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  tipo: {
-    type: DataTypes.ENUM('estoque', 'caixa', 'admin'),
+  role: {
+    type: DataTypes.ENUM('estoquista', 'caixa', 'admin'),
     allowNull: false,
+    defaultValue: 'estoquista' // Definindo valor padrão
   }
 }, {
   tableName: 'usuarios',

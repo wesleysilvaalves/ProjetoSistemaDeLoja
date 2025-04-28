@@ -1,59 +1,78 @@
-import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import { PackagePlus, List, ArrowDownCircle, Menu, X } from 'lucide-react';
+// src/layouts/DashboardLayout.jsx
 
-const DashboardLayout = () => {
-    const location = useLocation();
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Menu, X, LogOut, PackagePlus, List, ArrowDownCircle } from 'lucide-react';
+import logo from '../assets/logo.png';
+import { theme } from '../theme';
+
+export default function DashboardLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const role = localStorage.getItem('role');
 
     const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
+    const logout = () => {
+        localStorage.clear();
+        navigate('/login');
+    };
+
     const menuItems = [
-        { label: 'Cadastrar', to: '/estoque/cadastrar', icon: <PackagePlus size={16} /> },
-        { label: 'Listar', to: '/estoque/listar', icon: <List size={16} /> },
-        { label: 'Dar Baixa', to: '/estoque/baixa', icon: <ArrowDownCircle size={16} /> },
+        { label: 'Painel', path: '/painel' },
+        { label: 'Controle de Pedidos', path: '/pedidos' },
+        { label: 'Cadastrar Produto', path: '/estoque/cadastrar' },
+        { label: 'Listar Estoque', path: '/estoque/listar' },
+        { label: 'Controle de Caixa', path: '/caixa' }, // futura
     ];
 
     return (
-        <div className="flex min-h-screen font-poppins bg-gradient-to-br from-purple-800 to-purple-400 text-white">
+        <div className="flex min-h-screen bg-gradient-to-br from-purple-800 to-purple-400">
             {/* Sidebar */}
-            <aside className={`${sidebarOpen ? 'w-60' : 'w-16'} transition-all duration-300 bg-purple-900 p-4 flex flex-col gap-4`}>
-                <button
-                    onClick={toggleSidebar}
-                    className="mb-4 text-white self-end focus:outline-none"
-                >
-                    {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-                </button>
-                <div className="text-center mb-4">
-                    <img src={logo} alt="Logo" className="w-10 mx-auto mb-2" />
-                    {sidebarOpen && <h1 className="text-lg font-bold">Estoque</h1>}
+            <aside className={`bg-purple-900 text-white transition-all duration-300 ${sidebarOpen ? 'w-60' : 'w-16'} flex flex-col`}>
+                <div className="flex items-center justify-between p-4">
+                    <img src={logo} alt="Logo" className="h-8" />
+                    <button onClick={toggleSidebar}>
+                        {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                    </button>
                 </div>
-                <nav className="flex flex-col gap-2">
+
+                {sidebarOpen && (
+                    <h1 className="text-center text-lg font-bold mb-4">{theme.nomeEmpresa}</h1>
+                )}
+
+                <nav className="flex flex-col gap-2 px-4">
                     {menuItems.map((item) => (
-                        <Link
-                            key={item.to}
-                            to={item.to}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${location.pathname === item.to
-                                    ? 'bg-purple-600 text-white'
+                        <button
+                            key={item.path}
+                            onClick={() => navigate(item.path)}
+                            className={`flex items-center gap-2 p-2 rounded-md transition ${location.pathname.startsWith(item.path)
+                                    ? 'bg-purple-600'
                                     : 'hover:bg-purple-700 text-purple-200'
                                 }`}
                         >
-                            {item.icon}
-                            {sidebarOpen && item.label}
-                        </Link>
+                            {item.label}
+                        </button>
                     ))}
                 </nav>
+
+                <div className="mt-auto p-4">
+                    <button
+                        onClick={logout}
+                        className="flex items-center gap-2 w-full bg-red-600 hover:bg-red-700 p-2 rounded-md justify-center"
+                    >
+                        <LogOut size={16} />
+                        {sidebarOpen && 'Sair'}
+                    </button>
+                </div>
             </aside>
 
             {/* Conteúdo */}
-            <main className="flex-1 flex flex-col items-center justify-start p-6 md:p-10 overflow-x-auto">
-                <div className="bg-white text-black p-6 rounded-xl shadow-xl w-full max-w-[1200px] min-w-[360px]">
-                    <Outlet />
-                </div>
+            <main className="flex-1 p-6 overflow-y-auto">
+                <Outlet />
             </main>
         </div>
     );
-};
-
-export default DashboardLayout;
+}

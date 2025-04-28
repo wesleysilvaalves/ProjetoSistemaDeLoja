@@ -1,0 +1,9 @@
+{
+    "development": {
+        "username": "postgres",
+        "password": "77ddbfd777854031bdc33988388d9733",
+        "database": "parada_acai",
+        "host": "127.0.0.1",
+        "dialect": "postgres"
+    }
+}
