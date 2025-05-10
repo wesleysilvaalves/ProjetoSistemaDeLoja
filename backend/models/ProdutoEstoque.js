@@ -1,34 +1,49 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../database'); // em vez de '../config/database'
 
 const ProdutoEstoque = sequelize.define('ProdutoEstoque', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   nome: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   quantidade: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    type: DataTypes.FLOAT,
+    defaultValue: 0
   },
   unidade: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
-  categoria: {
-    type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: false
   },
   pesoUnidade: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.STRING
   },
   precoTotal: {
-    type: DataTypes.DECIMAL(10, 2),
-    allowNull: true,
+    type: DataTypes.FLOAT
+  },
+  precoUnitario: {
+    type: DataTypes.FLOAT
+  },
+  categoria: {
+    type: DataTypes.STRING
+  },
+  // Campo para rastrear estoque mínimo por produto
+  estoqueMinimo: {
+    type: DataTypes.FLOAT
+  },
+  // Campo para validade (produtos perecíveis)
+  dataValidade: {
+    type: DataTypes.DATE
+  },
+  // Campos personalizados específicos por tipo de negócio
+  camposPersonalizados: {
+    type: DataTypes.JSON,
+    defaultValue: {}
   }
-}, {
-  tableName: 'produtos_estoque',
-  timestamps: true
 });
 
 module.exports = ProdutoEstoque;

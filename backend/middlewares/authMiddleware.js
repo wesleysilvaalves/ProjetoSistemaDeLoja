@@ -1,21 +1,19 @@
 const jwt = require('jsonwebtoken');
+const { secret } = require('../config/jwt');
 
-const authMiddleware = (req, res, next) => {
-  const token = req.headers.authorization;
+module.exports = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ erro: 'Token não fornecido' });
+    return res.status(401).json({ message: 'Token não fornecido.' });
   }
 
-  const tokenLimpo = token.replace('Bearer ', '');
-
   try {
-    const decoded = jwt.verify(tokenLimpo, process.env.JWT_SECRET || 'segredo123');
-    req.usuario = decoded; // salva os dados do usuário logado na requisição
-    next(); // passa pro próximo
-  } catch (err) {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'segredo123');
+    req.usuario = decoded; // Adicionar usuário decodificado do token à requisição
+    next();
+  } catch (error) {
     return res.status(401).json({ erro: 'Token inválido' });
   }
 };
-
-module.exports = authMiddleware;

@@ -1,4 +1,4 @@
-const Usuarios = require('../models/Usuarios'); // com nome correto do model
+const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
   try {
     const hash = await bcrypt.hash(senha, 10);
 
-    const novoUsuario = await Usuarios.create({
+    const novoUsuario = await Usuario.create({
       nome,
       email,
       senha: hash,
@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
   const { email, senha } = req.body;
 
   try {
-    const usuario = await Usuarios.findOne({ where: { email } });
+    const usuario = await Usuario.findOne({ where: { email } });
 
     if (!usuario) {
       return res.status(401).json({ erro: 'Usuário não encontrado' });

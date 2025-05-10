@@ -1,7 +1,12 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const sequelize = require('../database'); // Caminho corrigido
 
 const Usuario = sequelize.define('Usuario', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
   nome: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -16,12 +21,12 @@ const Usuario = sequelize.define('Usuario', {
     allowNull: false,
   },
   tipo: {
-    type: DataTypes.ENUM('estoque', 'caixa', 'admin'),
+    type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
 }, {
   tableName: 'usuarios',
-  timestamps: true
+  timestamps: false,
 });
 
 module.exports = Usuario;
